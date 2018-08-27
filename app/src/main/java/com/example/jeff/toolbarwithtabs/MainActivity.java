@@ -1,22 +1,16 @@
 package com.example.jeff.toolbarwithtabs;
 
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,10 +50,18 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        addTab("Trips");
-        addTab("Stops");
-        addTab("Customers");
-        addTab("Equipment");
+        // if we have a savedInstanceState then we retrieve the tabs
+        // if not, we create some new tabs
+        if (savedInstanceState != null) {
+            int tabCount = savedInstanceState.getInt("tabCount");
+            for (int tabIndex = 0; tabIndex < tabCount; tabIndex++)
+                addTab(savedInstanceState.getString("tab_" + tabIndex));
+        } else {
+            addTab("Gimp");
+            addTab("Dump");
+            addTab("Parts");
+            addTab("Equip");
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
     private void addTab(String title) {
         tabLayout.addTab(tabLayout.newTab().setText(title));
         mSectionsPagerAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("tabCount", tabLayout.getTabCount());
+        for (int tabIndex = 0; tabIndex < tabLayout.getTabCount(); tabIndex++)
+            outState.putString("tab_" + tabIndex, tabLayout.getTabAt(tabIndex).getText().toString());
     }
 
     /**
@@ -139,4 +149,6 @@ public class MainActivity extends AppCompatActivity {
             return tabLayout.getTabCount();
         }
     }
+
+
 }

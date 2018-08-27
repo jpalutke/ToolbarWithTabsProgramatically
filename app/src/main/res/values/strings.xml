@@ -3,5 +3,5 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Viewing section: %d (%s)</string>
     <string name="tab_added">Tab %s added.</string>
-    <string name="saved_state_needed_or_lost">Tabs are lost on redraw. Implement saved states</string>
+    <string name="saved_state_needed_or_lost">Tabs are saved programmatically on orientation change. However, they are lost when app is killed by the user.</string>
 </resources>
